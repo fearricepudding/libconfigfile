@@ -22,6 +22,7 @@ int main(int argc, char** argv) {
             ("dump", "Output config file to cli")
             ("raw-statements", "Output raw SQL insert statements for the configs")
             ("raw-start-index", boost::program_options::value<int>(), "Set a start index for the raw SQL statements")
+            ("raw-type", boost::program_options::value<std::string>(), "Set a type for the database")
             ("path", boost::program_options::value<std::string>(), "Define the config path");
 
         boost::program_options::store(boost::program_options::parse_command_line(argc, argv, desc), vm);
@@ -50,11 +51,16 @@ int main(int argc, char** argv) {
 
     if (vm.count("raw-statements")) {
         int startIndex = 0;
+        std::string type = "GENERAL";
         if (vm.count("raw-start-index")) {
             startIndex = vm["raw-start-index"].as<int>();
         }
 
-        Database::generateInserts(config, startIndex);
+        if (vm.count("raw-type")) {
+            type = vm["raw-type"].as<std::string>();
+        }
+
+        Database::generateInserts(config, startIndex, type);
         return 0;
     }
 

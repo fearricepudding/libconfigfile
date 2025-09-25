@@ -6,11 +6,11 @@ void Database::generateInserts(std::map<std::string, std::string> config) {
     Database::generateInserts(config, 0);
 }
 
-void Database::generateInserts(std::map<std::string, std::string> config, int startIndex) {
+void Database::generateInserts(std::map<std::string, std::string> config, int startIndex, std::string type) {
     std::string type = "GENERAL";
     std::cout << "insert into PROPERTIES(PROPERTY_ID, PROPERTY_NAME, PROPERTY_VALUE, PROPERTY_TYPE)" << "\n" << "values" << "\n";
     for (const auto& [key, value] : config) {
-        std::cout << "(" << "'" << startIndex << "'" << ", '" << key << "', '" << value << "', '" << type << "') \n";
+        std::cout << "(" << "'" << startIndex << "'" << ", '" << key << "', '" << value << "', '" << type << "'), \n";
         startIndex++;
     }
 }
