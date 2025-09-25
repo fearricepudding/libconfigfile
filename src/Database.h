@@ -6,5 +6,5 @@
 class Database {
 public: 
     static void generateInserts(std::map<std::string, std::string>);
-    static void generateInserts(std::map<std::string, std::string>, int);
+    static void generateInserts(std::map<std::string, std::string>, int, std::string);
 };
