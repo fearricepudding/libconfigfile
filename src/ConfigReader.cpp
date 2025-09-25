@@ -2,8 +2,27 @@
 #include <fstream>
 #include <algorithm>
 #include <map>
+#include <cctype>
+#include <locale>
 
 #include "ConfigReader.h"
+
+inline void ltrim(std::string &s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
+        return !std::isspace(ch);
+    }));
+}
+
+inline void rtrim(std::string &s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
+        return !std::isspace(ch);
+    }).base(), s.end());
+}
+
+inline void trim(std::string &s) {
+    rtrim(s);
+    ltrim(s);
+}
 
 std::map<std::string, std::string> ConfigReader::getConfig(std::string configPath) {
     std::string content;
@@ -15,7 +34,7 @@ std::map<std::string, std::string> ConfigReader::getConfig(std::string configPat
     std::map<std::string, std::string> configMap;
     while (std::getline(config, content)) {
         cont = false;
-        content.erase(std::remove_if(content.begin(), content.end(), isspace), content.end());
+        trim(content);
 
         if (content[0] == '#' || content.empty()) {
             continue;
@@ -48,7 +67,9 @@ std::map<std::string, std::string> ConfigReader::getConfig(std::string configPat
         };
 
         std::string key = finalContent.substr(0, finalContent.find("="));
+        trim(key);
         std::string value = finalContent.substr(finalContent.find("=")+1, finalContent.size());
+        trim(value);
         configMap[key] = value;
     }
     config.close();
