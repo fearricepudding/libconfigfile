@@ -30,8 +30,8 @@ std::map<std::string, std::string> ConfigReader::getConfig(std::string configPat
     bool cont = false;
     bool cont_end = false;
     std::string cont_content;
-
     std::map<std::string, std::string> configMap;
+
     while (std::getline(config, content)) {
         cont = false;
         trim(content);
@@ -64,14 +64,17 @@ std::map<std::string, std::string> ConfigReader::getConfig(std::string configPat
             cont_content = "";
         } else if (!cont && !cont_end) {
             finalContent = content;
-        };
+        }
 
         std::string key = finalContent.substr(0, finalContent.find("="));
+        std::string value_1 = finalContent.substr(finalContent.find("=")+1, finalContent.size());
+        
+        std::string value = value_1;
         trim(key);
-        std::string value = finalContent.substr(finalContent.find("=")+1, finalContent.size());
         trim(value);
         configMap[key] = value;
     }
+
     config.close();
     return configMap;
 }
